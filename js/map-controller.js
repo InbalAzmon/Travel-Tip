@@ -32,8 +32,10 @@ window.onload = () => {
             .catch(err => {
                 console.log('err!!!', err);
             })
-        // panTo(35.6895, 139.6917);
     })
+
+    renderFavPlaces()
+    renderSearchBtn()
 }
 
 
@@ -50,7 +52,6 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
                     },
                     zoom: 15
                 })
-            // console.log('Map!', gGoogleMap);
 
             gGoogleMap.addListener('click', (ev) => {
                 // console.log('Map clicked', ev);
@@ -70,10 +71,24 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
         })
 }
 
+function renderSearchBtn(){
+var strHTML = `<button onclick="searchLocation()">Go</button>`;
+const elBtnSearch = document.querySelector('.btn-search');
+elBtnSearch.innerHTML = strHTML
+}
+
+window.searchLocation = function() {
+ const elAddress = document.querySelector('input[name=search-local]').value
+ 
+//  JSON.parse({elAddress})
+ console.log('elAddress',elAddress);
+}
+
 function renderFavPlaces() {
     const locations = locationService.getLocationsForDisplay();
+    console.log('locations',locations);
     const strHTMLs = locations.map(function (place) {
-        return ` <tr><td>${place.placeName}</td>
+        return ` <tr><td class="grid-item">${place.placeName}</td>
         <td><button class="btn-pan" onclick="panTo(${place.lat},${place.lng})">Go There</button></td>
         <td><button class="btn-delete" data-id="${place.placeName}">Delete</button></td>
         </tr>
@@ -88,17 +103,6 @@ function renderFavPlaces() {
             locationService.deleteLocation(placeId)
         })
     })
-
-    // const elBtnsPan= Array.from(document.querySelectorAll('.btn-pan'))
-    // elBtnsPan.forEach(elBtn => {
-    //     elBtn.addEventListener('click',ev => {
-    //         console.log('dataset', ev.target.dataset);
-    // const placeLat = ev.target.dataset.lat
-    // const placeLng = ev.target.dataset.lng
-    // console.log('pan to:',placeLat ,'', placeLng);
-    // panTo(placeLat,placeLng)
-    //     })
-    // })
 }
 
 function addMarker(loc) {
@@ -120,7 +124,6 @@ function getUserPosition() {
     console.log('Getting Pos');
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
-
     })
 }
 

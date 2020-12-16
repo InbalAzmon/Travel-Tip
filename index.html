@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ES6</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Travel-Tip</title>
 </head>
 <body>
-    <h1>ES6</h1>
-    <div id="map" style="width: 50%; height: 400px;"></div>
+    <h1>Travel-Tip</h1>
+    </div>
+    <section class="map-container">
+        <div class="search-container">
+            <input type="text" name="search-local" id="search-local" class="search-local">
+            <div class="btn-search"></div>
+            <button class="btn-local">My Location</button>
+        </div>
+        <div id="map" class="map" style="width: 50%; height: 400px;"></div>
+    </section>
     <table>
         <tbody class="table"></tbody>
     </table>
-    <button class="btn-local">My Location</button>
     
     <script type="module" src="js/map-controller.js"></script>
 </body>

@@ -18,7 +18,9 @@ const  gLocations = [];
 
 
 function getLocalToSave(place){
+    console.log('entered getLocalToSave');
     gLocations.push(place)
+  
     saveToStorage(PLACES,gLocations)
 }
 
@@ -48,6 +50,7 @@ function loadFromStorage(key) {
 }
 
 function saveToStorage(key, value) {
+    console.log('saving to storage');
     var json = JSON.stringify(value);
     localStorage.setItem(key, json)
 }
