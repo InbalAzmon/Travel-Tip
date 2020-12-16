@@ -2,7 +2,8 @@
 export const locationService = {
     getLocations,
     deleteLocation,
-    getLocalToSave
+    getLocalToSave,
+    getLocationsForDisplay
 }
 
 // export const locationVars = {
@@ -23,6 +24,11 @@ function getLocalToSave(place){
 
 function getLocations() {
     return Promise.resolve(gLocations)
+}
+
+function getLocationsForDisplay(){
+    const locations = loadFromStorage(PLACES);
+    return locations;
 }
 
 function deleteLocation(placeName) {
