@@ -62,10 +62,21 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
                 // saveToStorage(PLACES, gPlaces);
         
         
-                // renderFavPlaces();
+                renderFavPlaces();
                 // goToPlace();
             });
         })
+}
+
+function renderFavPlaces(){
+    const strHTMLs = gPlaces.map(function(place){
+        return ` <tr><td>${place.placeName}</td>
+        <td><button onclick="panTo(${place.lat},${place.lng})">Go There</button></td>
+        <td><button onclick="deletePlace(${place.placeName})">Delete</button></td>
+        </tr>
+        `
+    })
+    document.querySelector('.table').innerHTML = strHTMLs.join('');
 }
 
 function addMarker(loc) {
