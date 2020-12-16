@@ -1,10 +1,12 @@
 
 import {locationService} from './services/location-service.js'
-
+// import {locationVars} from './services/location-service.js'
 
 console.log('locationService', locationService);
+// console.log('locationVars', locationVars);
 
 var gGoogleMap;
+var gPlaces = []
 
 window.onload = () => {
     initMap()
@@ -22,23 +24,47 @@ window.onload = () => {
         })
 
     document.querySelector('.btn').addEventListener('click', (ev) => {
-        console.log('Aha!', ev.target);
+        // console.log('Aha!', ev.target);
         panTo(35.6895, 139.6917);
     })
 }
 
 
 export function initMap(lat = 32.0749831, lng = 34.9120554) {
-    console.log('InitMap');
+    // console.log('InitMap');
     return _connectGoogleApi()
         .then(() => {
-            console.log('google available');
+            // console.log('google available');
             gGoogleMap = new google.maps.Map(
                 document.querySelector('#map'), {
                 center: { lat, lng },
                 zoom: 15
             })
-            console.log('Map!', gGoogleMap);
+            // console.log('Map!', gGoogleMap);
+
+            gGoogleMap.addListener('click', (ev) => {
+                // console.log('Map clicked', ev);
+                
+                const placeName = prompt('Place name?')
+                console.log('Map clicked', placeName, ev.latLng.lat(), ev.latLng.lng());
+                var place = {
+                    placeName,
+                    lat: ev.latLng.lat(),
+                    lng: ev.latLng.lng(),
+                    dateCreated: Date.now()
+                }
+                addMarker(place)
+
+        
+                //saveLocation(place)-service
+                gPlaces.push(place);
+                console.log('gPlaces',gPlaces);
+                // saveToStorage(PLACES, gPlaces);
+        
+        
+                // renderFavPlaces();
+                // goToPlace();
+            });
         })
 }
 
