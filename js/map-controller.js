@@ -15,17 +15,20 @@ window.onload = () => {
         })
         .catch(console.log('INIT MAP ERROR'));
 
-    getUserPosition()
+    
+
+    document.querySelector('.btn-local').addEventListener('click', (ev) => {
+        console.log('Aha!', ev.target);
+        getUserPosition()
         .then(pos => {
             console.log('User position is:', pos.coords);
+            const userCoords = pos.coords
+            panTo(userCoords.lat, userCoords.lng);
         })
         .catch(err => {
             console.log('err!!!', err);
         })
-
-    document.querySelector('.btn').addEventListener('click', (ev) => {
-        // console.log('Aha!', ev.target);
-        panTo(35.6895, 139.6917);
+        // panTo(35.6895, 139.6917);
     })
 }
 
@@ -54,16 +57,8 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
                     dateCreated: Date.now()
                 }
                 addMarker(place)
-
-        
-                //saveLocation(place)-service
-                gPlaces.push(place);
-                console.log('gPlaces',gPlaces);
-                // saveToStorage(PLACES, gPlaces);
-        
-        
+                locationService.getLocalToSave(place)
                 renderFavPlaces();
-                // goToPlace();
             });
         })
 }
@@ -71,12 +66,29 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
 function renderFavPlaces(){
     const strHTMLs = gPlaces.map(function(place){
         return ` <tr><td>${place.placeName}</td>
-        <td><button onclick="panTo(${place.lat},${place.lng})">Go There</button></td>
-        <td><button onclick="deletePlace(${place.placeName})">Delete</button></td>
+        <td><button class="btn-pan" data-id="panTo(${place.lat},${place.lng})">Go There</button></td>
+        <td><button class="btn-delete" data-id="${place.placeName}">Delete</button></td>
         </tr>
         `
     })
     document.querySelector('.table').innerHTML = strHTMLs.join('');
+    const elBtnsDelete = Array.from(document.querySelectorAll('.btn-delete'))
+    elBtnsDelete.forEach(elBtn => {
+        elBtn.addEventListener('click',ev => {
+            const placeId = ev.target.dataset.id
+            console.log('delete in:',placeId)
+            locationService.deleteLocation(placeId)
+        })
+    })
+    const elBtnsPan= Array.from(document.querySelectorAll('.btn-pan'))
+    elBtnsPan.forEach(elBtn => {
+        elBtn.addEventListener('click', ev => {
+            const placeLat = ev.target.dataset.lat
+            const placeLng = ev.target.dataset.lng
+            console.log('pan to:',placeLat ,'', placeLng);
+            panTo(placeLat,placeLng)
+        })
+    })
 }
 
 function addMarker(loc) {
@@ -97,6 +109,7 @@ function getUserPosition() {
     console.log('Getting Pos');
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
+                            
     })
 }
 

@@ -1,8 +1,8 @@
 
 export const locationService = {
     getLocations,
-    saveToStorage,
-    loadFromStorage,
+    deleteLocation,
+    getLocalToSave
 }
 
 // export const locationVars = {
@@ -11,13 +11,28 @@ export const locationService = {
 // }
 
 
-// const PLACES = 'places';
-// var gPlaces = [];
-const  gLocations = [{lat: 17, lng: 19, name: 'Puki Home'}];
+const PLACES = 'places';
 
+const  gLocations = [];
+
+
+function getLocalToSave(place){
+    gLocations.push(place)
+    saveToStorage(PLACES,gLocations)
+}
 
 function getLocations() {
     return Promise.resolve(gLocations)
+}
+
+function deleteLocation(placeName) {
+    var placeIdx = gLocations.findIndex((place) => {
+        return placeName === place.placeName;
+    });
+    if(placeIdx === -1) return;
+
+    gLocations.splice(placeIdx, 1);
+    saveToStorage(PLACES, gLocations);
 }
 
 function loadFromStorage(key) {
